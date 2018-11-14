@@ -29,7 +29,8 @@ public class GLCMFeatureExtractionTest {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
 //        File file = new File("C:\\Users\\user\\Pictures\\Leaf\\FlaviaSamples");
-        File file = new File("F:\\KULIAH\\TA\\Flavia Training Dataset");
+//        File file = new File("F:\\KULIAH\\TA\\Flavia Training Dataset");
+        File file = new File("F:\\KULIAH\\TA\\Flavia Testing Dataset");
         File[] listOfFiles = file.listFiles();
 
         StringBuilder builder = new StringBuilder();
@@ -38,7 +39,7 @@ public class GLCMFeatureExtractionTest {
                 builder.append(processData(listOfFiles[i].getAbsolutePath()));
                 builder.append(System.getProperty("line.separator"));
             }
-            BufferedWriter writer = new BufferedWriter(new FileWriter("F:\\Dataset Text\\glcm-extracted-dataset-training.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("F:\\Dataset Text\\glcm-extracted-dataset-testing.txt"));
             writer.write(builder.toString());//save the string representation of the board
             writer.close();
         } catch (IOException e) {

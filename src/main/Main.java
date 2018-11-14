@@ -7,14 +7,24 @@ package main;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -23,10 +33,16 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import morph.MorphFeatures;
+import morph.Point;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Size;
 import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
+import org.opencv.imgproc.Imgproc;
+import static org.opencv.imgproc.Imgproc.COLOR_BGR2GRAY;
+import static org.opencv.imgproc.Imgproc.THRESH_OTSU;
 
 /**
  *
@@ -39,24 +55,24 @@ public class Main extends javax.swing.JFrame {
      */
     JLabel image;
     public static BufferedImage imageProcessed = null;
-    static double rotateFactorRight;
-    static double rotateFactorLeft;
+    public MorphFeatures morph = new MorphFeatures();
+    private int xFrom = 0;
+    private int yFrom = 0;
+    private int xTo = 0;
+    private int yTo = 0;
+    private JLabel img;
     static String currentDirectory;
     static String savedDirectory;
 
     public Main() {
         initComponents();
-
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         setResizable(false);
         setTitle("Image Processing");
         setSize(1300, 750);
         setLocationRelativeTo(null);
 
         JFileChooser c = new JFileChooser();
-
-        JLabel text1 = new JLabel("Image Processed");
-        text1.setBounds(500, 40, 250, 35);
-        text1.setFont(new Font("Arial", Font.PLAIN, 30));
 
         image = new JLabel();
 
@@ -68,11 +84,11 @@ public class Main extends javax.swing.JFrame {
         String[] items = {"Pubescent Bamboo", "Chinese horse chestnut",
             "Anhui Barberry", "Chinese Redbud", "True Indigo",
             "Japanese Maple", "Nanmu", "Castor Aralia", "Chinese Cinnamon",
-            "Goldenrain Tree", "Big-fruited Holly", "Japanese Cheesewood", 
-            "Wintersweet","Camphortree", "Japan Arrowwood", "Sweet Osmanthus", 
-            "Deodar","Gingko", "Crape Myrtle", "Oleander", "Yew Plum Nine", 
-            "Japanese Cherry","Glossy Privet", "Chinese Toon", "Peach", 
-            "Ford Woodlotus", "Trident Maple","Beale's Barberry", 
+            "Goldenrain Tree", "Big-fruited Holly", "Japanese Cheesewood",
+            "Wintersweet", "Camphortree", "Japan Arrowwood", "Sweet Osmanthus",
+            "Deodar", "Gingko", "Crape Myrtle", "Oleander", "Yew Plum Nine",
+            "Japanese Cherry", "Glossy Privet", "Chinese Toon", "Peach",
+            "Ford Woodlotus", "Trident Maple", "Beale's Barberry",
             "Southern Magnolia", "Canadian Poplar", "Chinese Tulip Tree", "Tangerine"};
 
         JComboBox options = new JComboBox(items);
@@ -121,47 +137,58 @@ public class Main extends javax.swing.JFrame {
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int choice = options.getSelectedIndex();
-                switch (choice) {
-                    case 0:
-                        imageProcessed = normal();
-                        rotateFactorRight = 0;
-                        rotateFactorLeft = 0;
-                        System.out.println("Normal");
-                        break;
-                    case 1:
-                        imageProcessed = negative();
-                        System.out.println("Negatif");
-                        break;
-                    case 2: {
-                        imageProcessed = greyscale();
-                        System.out.println("Greyscale");
-                        break;
+                //System.out.println("Click go: "+calculateDistance(xFrom, yFrom, xTo, yTo));
+                String filename = "F:\\Dataset Text\\geometric-features-extracted.txt";
+                //System.out.println("CUrr: "+currentDirectory);
+//                Mat color = Imgcodecs.imread(currentDirectory);
+                Mat color = morph.bufferedImageToMat(imageProcessed);
+                Mat gray = new Mat();
+                Mat binary = new Mat();
+                Mat edge = new Mat();
+                Imgproc.cvtColor(color, gray, COLOR_BGR2GRAY);
+
+                Imgproc.GaussianBlur(gray, gray, new Size(15, 15), 0);
+
+                //binarization
+                Imgproc.threshold(gray, binary, 50, 250, THRESH_OTSU);
+                //System.out.println("Threshold otsu " + THRESH_OTSU);
+
+                //edge detection
+                Imgproc.Canny(binary, edge, 200, 230);
+                //Imgproc.dilate(binary, binary, kernel);
+
+                BufferedImage edgeImage = morph.convertMatToBufferedImage(edge);
+                BufferedImage binaryImage = morph.convertMatToBufferedImage(binary);
+                ArrayList<Point> coordinates = new ArrayList();
+                for (int i = 0; i < edgeImage.getWidth(); i++) {
+                    for (int j = 0; j < edgeImage.getHeight(); j++) {
+                        Color c = new Color(edgeImage.getRGB(i, j));
+                        //253 warna putih di image binary, 0 hitam
+                        if (c.getRed() == 255) {
+                            coordinates.add(new Point(i, j));
+                        }
                     }
-                    case 3: {
-                        imageProcessed = sobel();
-                        System.out.println("Greyscale");
-                        break;
-                    }
-                    case 4: {
-                        imageProcessed = prewitt();
-                        //System.out.println("Greyscale");
-                        break;
-                    }
-                    case 5: {
-                        //imageProcessed = robert();
-                        //System.out.println("Greyscale");
-                        break;
-                    }
-                    case 6: {
-                        imageProcessed = imageEnhancementUsingKernel("Blur");
-                        System.out.println("Blur");
-                    }
+                }
+                
+                Point init = new Point(xFrom, yFrom);
+//                System.out.println(morph.findMaxDistance(init, coordinates));
+                
+                double physicalLength = calculateDistance(xFrom, yFrom, xTo, yTo);
+                double diameter = morph.findMaxDistance(init, coordinates);
+                int perimeter = morph.calculatePerimeter(edgeImage);
+                int area = morph.calculateArea(binaryImage);
+
+                try (FileWriter fw = new FileWriter(filename, true);
+                        BufferedWriter bw = new BufferedWriter(fw);
+                        PrintWriter out = new PrintWriter(bw)) {
+                    out.println( physicalLength+ " " + diameter + " "
+                            + perimeter + " " + area);
+                } catch (IOException ex) {
+                    //exception handling left as an exercise for the reader
                 }
             }
         });
 
-        add(text1);
         add(image);
         add(openButton);
         add(saveButton);
@@ -169,7 +196,46 @@ public class Main extends javax.swing.JFrame {
         add(inputField);
         add(confirmButton);
         add(pseudoColorButton);
+        addMouseListener(mouseHandler);
+        addMouseMotionListener(mouseMotionHandler);
+    }
 
+    public MouseListener mouseHandler = new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+            xFrom = xTo = e.getX();
+            yFrom = yTo = e.getY();
+            repaint();
+            System.out.println("Titik 1: " + e.getPoint());
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            xTo = e.getX();
+            yTo = e.getY();
+            repaint();
+            System.out.println("Titik 2: " + e.getPoint());
+            //System.out.println("Jarak Garis: "+calculateDistance(xFrom, yFrom, xTo, yTo));
+        }
+    };
+
+    public MouseMotionAdapter mouseMotionHandler = new MouseMotionAdapter() {
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            xTo = e.getX();
+            yTo = e.getY();
+            repaint();
+            //System.out.println("Titik 2: "+e.getPoint());
+        }
+    };
+
+    public void paint(Graphics g) {
+        super.paint(g);
+        g.drawLine(xFrom, yFrom, xTo, yTo);
+    }
+
+    public double calculateDistance(double xFrom, double yFrom, double xTo, double yTo) {
+        return Math.sqrt(Math.pow(xFrom - xTo, 2) + Math.pow(yFrom - yTo, 2));
     }
 
     public BufferedImage normal() {
@@ -184,7 +250,6 @@ public class Main extends javax.swing.JFrame {
                     //System.out.print("("+tmp.getRed()+","+tmp.getGreen()+","+tmp.getBlue()+")\t");
                     //System.out.print(i+","+j);
                 }
-                System.out.println("");
             }
 
         } catch (Exception e) {
@@ -193,210 +258,13 @@ public class Main extends javax.swing.JFrame {
         return input;
     }
 
-    public BufferedImage sobel() {
-        BufferedImage output = null;
-        try {
-            BufferedImage input = imageProcessed;
-            output = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
-
-            int[][] pixelMatrix = new int[3][3];
-            for (int i = 1; i < input.getWidth() - 1; i++) {
-                for (int j = 1; j < input.getHeight() - 1; j++) {
-                    pixelMatrix[0][0] = new Color(input.getRGB(i - 1, j - 1)).getRed();
-                    pixelMatrix[0][1] = new Color(input.getRGB(i - 1, j)).getRed();
-                    pixelMatrix[0][2] = new Color(input.getRGB(i - 1, j + 1)).getRed();
-                    pixelMatrix[1][0] = new Color(input.getRGB(i, j - 1)).getRed();
-                    pixelMatrix[1][2] = new Color(input.getRGB(i, j + 1)).getRed();
-                    pixelMatrix[2][0] = new Color(input.getRGB(i + 1, j - 1)).getRed();
-                    pixelMatrix[2][1] = new Color(input.getRGB(i + 1, j)).getRed();
-                    pixelMatrix[2][2] = new Color(input.getRGB(i + 1, j + 1)).getRed();
-
-                    int edge = (int) convolutionSobel(pixelMatrix);
-                    output.setRGB(i, j, (edge << 16 | edge << 8 | edge));
-                }
-            }
-
-            image.setIcon(new ImageIcon(resizeImage(output)));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return output;
-    }
-
-    public BufferedImage prewitt() {
-        BufferedImage output = null;
-        try {
-            BufferedImage input = imageProcessed;
-            output = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
-
-            int[][] pixelMatrix = new int[3][3];
-            for (int i = 1; i < input.getWidth() - 1; i++) {
-                for (int j = 1; j < input.getHeight() - 1; j++) {
-                    pixelMatrix[0][0] = new Color(input.getRGB(i - 1, j - 1)).getRed();
-                    pixelMatrix[0][1] = new Color(input.getRGB(i - 1, j)).getRed();
-                    pixelMatrix[0][2] = new Color(input.getRGB(i - 1, j + 1)).getRed();
-                    pixelMatrix[1][0] = new Color(input.getRGB(i, j - 1)).getRed();
-                    pixelMatrix[1][2] = new Color(input.getRGB(i, j + 1)).getRed();
-                    pixelMatrix[2][0] = new Color(input.getRGB(i + 1, j - 1)).getRed();
-                    pixelMatrix[2][1] = new Color(input.getRGB(i + 1, j)).getRed();
-                    pixelMatrix[2][2] = new Color(input.getRGB(i + 1, j + 1)).getRed();
-
-                    int edge = (int) convolutionPrewitt(pixelMatrix);
-                    output.setRGB(i, j, (edge << 16 | edge << 8 | edge));
-                }
-            }
-
-            image.setIcon(new ImageIcon(resizeImage(output)));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return output;
-    }
-
-    public static double convolutionSobel(int[][] pixelMatrix) {
-        int gx = (pixelMatrix[0][0] * -1) + (pixelMatrix[0][1] * -2) + (pixelMatrix[0][2] * -1)
-                + (pixelMatrix[2][0]) + (pixelMatrix[2][1] * 2) + (pixelMatrix[2][2]);
-
-//        int gy = (pixelMatrix[0][0]) + (pixelMatrix[0][2] * -1) + (pixelMatrix[1][0] * 2) +
-//                (pixelMatrix[1][2] * -2) + (pixelMatrix[2][0]) + (pixelMatrix[2][2] * -1);
-        int gy = (pixelMatrix[0][0] * -1) + (pixelMatrix[1][0] * -2) + (pixelMatrix[2][0] * -1)
-                + (pixelMatrix[0][2]) + (pixelMatrix[1][2] * 2) + (pixelMatrix[2][2]);
-
-        return Math.sqrt(Math.pow(gx, 2) + Math.pow(gy, 2));
-
-    }
-
-    public static double convolutionPrewitt(int[][] pixelMatrix) {
-        int gy = (pixelMatrix[0][0] * -1) + (pixelMatrix[0][1] * -1) + (pixelMatrix[0][2] * -1)
-                + (pixelMatrix[2][0]) + (pixelMatrix[2][1]) + (pixelMatrix[2][2]);
-
-        int gx = (pixelMatrix[0][0] * -1) + (pixelMatrix[1][0] * -1) + (pixelMatrix[2][0] * -1)
-                + (pixelMatrix[0][2]) + (pixelMatrix[1][2]) + (pixelMatrix[2][2]);
-
-        return Math.sqrt(Math.pow(gx, 2) + Math.pow(gy, 2));
-
-    }
-
-    public BufferedImage negative() {
-        BufferedImage output = null;
-        try {
-            BufferedImage input = imageProcessed;
-            output = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
-
-            for (int i = 0; i < output.getWidth(); i++) {
-                for (int j = 0; j < output.getHeight(); j++) {
-                    Color tmp = new Color(input.getRGB(i, j));
-
-                    int negRed = 255 - tmp.getRed();
-                    int negGreen = 255 - tmp.getGreen();
-                    int negBlue = 255 - tmp.getBlue();
-
-                    Color after = new Color(negRed, negGreen, negBlue);
-                    output.setRGB(i, j, after.getRGB());
-                }
-            }
-
-            image.setIcon(new ImageIcon(resizeImage(output)));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return output;
-    }
-
-    public BufferedImage greyscale() {
-        BufferedImage output = null;
-        try {
-            BufferedImage input = imageProcessed;
-            output = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
-
-            for (int i = 0; i < output.getWidth(); i++) {
-                for (int j = 0; j < output.getHeight(); j++) {
-                    Color tmp = new Color(input.getRGB(i, j));
-
-                    int grey = (tmp.getRed() + tmp.getGreen() + tmp.getBlue()) / 3;
-
-//                    int grey = (int)(tmp.getRed()*0.1 + tmp.getGreen()*0.8 + tmp.getBlue()*0.1);
-                    Color after = new Color(grey, grey, grey);
-                    output.setRGB(i, j, after.getRGB());
-                }
-            }
-            image.setIcon(new ImageIcon(resizeImage(output)));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return output;
-    }
-
-    public BufferedImage imageEnhancementUsingKernel(String type) {
-        BufferedImage output = null;
-        try {
-            BufferedImage input = ImageIO.read(new File(currentDirectory));
-            output = new BufferedImage(input.getWidth(), input.getHeight(), input.getType());
-
-            Kernel kernel = null;
-
-            switch (type) {
-                case "Blur": {
-                    input = imageProcessed;
-                    kernel = new Kernel(3, 3, new float[]{
-                        1f / 9f, 1f / 9f, 1f / 9f,
-                        1f / 9f, 1f / 9f, 1f / 9f,
-                        1f / 9f, 1f / 9f, 1f / 9f});
-
-//                    kernel = new Kernel(3, 3, new float[]{
-//                        1f / 16f, 2f / 16f, 1f / 16f,
-//                        2f / 16f, 4f / 16f, 2f / 16f,
-//                        1f / 16f, 2f / 16f, 1f / 16f});
-                    break;
-                }
-                case "Sharpened": {
-                    input = imageProcessed;
-                    kernel = new Kernel(3, 3, new float[]{
-                        -1, -1, -1,
-                        -1, 9, -1,
-                        -1, -1, -1});
-                    break;
-                }
-                case "Emboss": {
-                    input = imageProcessed;
-                    kernel = new Kernel(3, 3, new float[]{-2, 0, 0, 0, 1, 0, 0, 0, 2});
-                    break;
-                }
-                case "Edge": {
-                    input = imageProcessed;
-//                    kernel = new Kernel(3, 3, new float[]{0, -1, 0, -1, 4, -1, 0, -1, 0});
-
-                    //kernel untuk sharpen  
-//                    kernel = new Kernel(3, 3, new float[]{0, -1, 0, -1, 5, -1, 0, -1, 0});
-                    //kernel untuk deteksi garis
-//                    kernel = new Kernel(3, 3, new float[]{-1, -1, -1, -1, 8, -1, -1, -1, -1});
-                    //Laplacian Gaussian Filter
-                    kernel = new Kernel(5, 5, new float[]{
-                        2f / 159f, 4f / 159f, 5f / 159f, 4f / 159f, 2f / 159f,
-                        4f / 159f, 9f / 159f, 12f / 159f, 9f / 159f, 4f / 159f,
-                        5f / 159f, 12f / 159f, 15f / 159f, 12f / 159f, 5f / 159f,
-                        4f / 159f, 9f / 159f, 12f / 159f, 9f / 159f, 4f / 159f,
-                        2f / 159f, 4f / 159f, 5f / 159f, 4f / 159f, 2f / 159f,});
-                    break;
-                }
-            }
-
-            BufferedImageOp op = new ConvolveOp(kernel);
-            output = op.filter(input, output);
-            image.setIcon(new ImageIcon(resizeImage(output)));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return output;
-    }
-
     private Image resizeImage(BufferedImage img) {
         if (img.getWidth() > 970 && img.getHeight() > 600) {
-            Image dimg = img.getScaledInstance(970, 600, Image.SCALE_SMOOTH);
-            image.setBounds(300, 90, 970, 600);
+            Image dimg = img.getScaledInstance(900, 675, Image.SCALE_SMOOTH);
+            image.setBounds(300, 20, 900, 675);
             return dimg;
         } else {
-            image.setBounds(300, 90, img.getWidth(), img.getHeight());
+            image.setBounds(300, 20, img.getWidth(), img.getHeight());
             return img;
         }
 

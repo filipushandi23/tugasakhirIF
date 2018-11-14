@@ -102,17 +102,17 @@ public class SVM {
     
     //decision function
     public double classify(double[][] solutions, double[] dotProductTesting, double[] classList) {
-        //f(x) = sign(sum of alpha-i*Yi*K(X,Xi) + b)
+       //f(x) = sign(sum of alpha-i*Yi*K(X,Xi) + b)
         double value = 0;
         //Jumlah dari perkalian alpha-i dengan K(X,Xi) dengan Yi
-        for (int i = 0; i < classList.length; i++) {
+        for (int i = 0; i < classList.length - 1; i++) {
             value += solutions[i][0] * dotProductTesting[i] * classList[i];
         }
 
         //jumlah perkalian diatas ditambah dengan bias
-        value += solutions[classList.length][0];
-        
-        System.out.println("Value = "+value);
+        value += solutions[classList.length - 1][0];
+
+        System.out.println("Value = " + value);
         return Math.signum(value);
     }
 
