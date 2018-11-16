@@ -101,12 +101,12 @@ public class SVM {
     }
     
     //decision function
-    public double classify(double[][] solutions, double[] dotProductTesting, double[] classList) {
+    public double classify(double[][] solutions, double[] rbfTest, double[] classList) {
        //f(x) = sign(sum of alpha-i*Yi*K(X,Xi) + b)
         double value = 0;
         //Jumlah dari perkalian alpha-i dengan K(X,Xi) dengan Yi
         for (int i = 0; i < classList.length - 1; i++) {
-            value += solutions[i][0] * dotProductTesting[i] * classList[i];
+            value += solutions[i][0] * rbfTest[i] * classList[i];
         }
 
         //jumlah perkalian diatas ditambah dengan bias

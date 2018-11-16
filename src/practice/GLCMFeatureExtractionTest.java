@@ -30,7 +30,7 @@ public class GLCMFeatureExtractionTest {
 
 //        File file = new File("C:\\Users\\user\\Pictures\\Leaf\\FlaviaSamples");
 //        File file = new File("F:\\KULIAH\\TA\\Flavia Training Dataset");
-        File file = new File("F:\\KULIAH\\TA\\Flavia Testing Dataset");
+        File file = new File("F:\\KULIAH\\TA\\Flavia Testing Dataset\\sp2");
         File[] listOfFiles = file.listFiles();
 
         StringBuilder builder = new StringBuilder();
@@ -39,7 +39,7 @@ public class GLCMFeatureExtractionTest {
                 builder.append(processData(listOfFiles[i].getAbsolutePath()));
                 builder.append(System.getProperty("line.separator"));
             }
-            BufferedWriter writer = new BufferedWriter(new FileWriter("F:\\Dataset Text\\glcm-extracted-dataset-testing.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("F:\\Dataset Text\\glcm-extracted-dataset-testing-5features-2.txt"));
             writer.write(builder.toString());//save the string representation of the board
             writer.close();
         } catch (IOException e) {
@@ -67,11 +67,12 @@ public class GLCMFeatureExtractionTest {
 //        System.out.println("Correlation = " + glcm.correlation(glcmMatrix));
         double asm = glcm.angularSecondMoment(glcmMatrix);
         double contrast = glcm.contrast(glcmMatrix);
-        double variance = glcm.variance(glcmMatrix);
+//        double variance = glcm.variance(glcmMatrix);
         double entropy = glcm.entropy(glcmMatrix);
         double homogenity = glcm.homogenity(glcmMatrix);
         double correlation = glcm.correlation(glcmMatrix);
 
-        return asm + " " + contrast + " " + variance + " " + entropy + " " + homogenity + " " + correlation;
+//        return asm + " " + contrast + " " + variance + " " + entropy + " " + homogenity + " " + correlation;
+        return asm + " " + contrast + " " + entropy + " " + homogenity + " " + correlation;
     }
 }

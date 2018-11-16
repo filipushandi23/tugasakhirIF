@@ -5,6 +5,8 @@
  */
 package main;
 
+import colormoments.ColorMoments;
+import glcm.GLCM;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -21,10 +23,13 @@ import java.awt.image.ConvolveOp;
 import java.awt.image.Kernel;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -32,6 +37,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import morph.MorphFeatures;
 import morph.Point;
@@ -43,6 +49,10 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import static org.opencv.imgproc.Imgproc.COLOR_BGR2GRAY;
 import static org.opencv.imgproc.Imgproc.THRESH_OTSU;
+import practice.CobaOpenCV;
+import static practice.ColorMomentsExtractionTest.convertMatToBufferedImage;
+import static practice.TestGLCM_SVM.getDataFromText;
+import svm.SVM;
 
 /**
  *
@@ -78,8 +88,10 @@ public class Main extends javax.swing.JFrame {
 
         JButton openButton = new JButton("Open Image");
         JButton saveButton = new JButton("Save Image");
-        JButton confirmButton = new JButton("GO");
-        JButton pseudoColorButton = new JButton("Train");
+        JButton extractMorphButton = new JButton("Extract Morph Features");
+        JButton extractGLCMButton = new JButton("Extract GLCM Features");
+        JButton classifyGLCM = new JButton("Classify GLCM");
+        JButton classifyColor = new JButton("Classify COlor");
 
         String[] items = {"Pubescent Bamboo", "Chinese horse chestnut",
             "Anhui Barberry", "Chinese Redbud", "True Indigo",
@@ -97,12 +109,17 @@ public class Main extends javax.swing.JFrame {
         JTextField inputField = new JTextField();
         inputField.setBounds(50, 200, 220, 30);
 
-        confirmButton.setBounds(50, 250, 220, 30);
-        confirmButton.setEnabled(false);
+        extractMorphButton.setBounds(50, 250, 220, 30);
+        extractMorphButton.setEnabled(false);
         openButton.setBounds(50, 50, 220, 30);
         saveButton.setBounds(50, 100, 220, 30);
-        pseudoColorButton.setBounds(50, 350, 220, 30);
-        pseudoColorButton.setEnabled(false);
+        extractGLCMButton.setBounds(50, 350, 220, 30);
+        extractGLCMButton.setEnabled(false);
+
+        classifyColor.setBounds(50, 400, 220, 30);
+        classifyColor.setEnabled(false);
+        classifyGLCM.setBounds(50, 500, 220, 30);
+        classifyGLCM.setEnabled(false);
 
         openButton.addActionListener(new ActionListener() {
             @Override
@@ -111,8 +128,10 @@ public class Main extends javax.swing.JFrame {
                 if (rVal == JFileChooser.APPROVE_OPTION) {
                     currentDirectory = c.getCurrentDirectory().toString() + "\\" + c.getSelectedFile().getName();
                     System.out.println("Dir : " + currentDirectory);
-                    confirmButton.setEnabled(true);
-                    pseudoColorButton.setEnabled(true);
+                    extractMorphButton.setEnabled(true);
+                    extractGLCMButton.setEnabled(true);
+                    classifyGLCM.setEnabled(true);
+                    classifyColor.setEnabled(true);
                     imageProcessed = normal();
                 }
             }
@@ -134,7 +153,7 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
-        confirmButton.addActionListener(new ActionListener() {
+        extractMorphButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //System.out.println("Click go: "+calculateDistance(xFrom, yFrom, xTo, yTo));
@@ -169,10 +188,10 @@ public class Main extends javax.swing.JFrame {
                         }
                     }
                 }
-                
+
                 Point init = new Point(xFrom, yFrom);
 //                System.out.println(morph.findMaxDistance(init, coordinates));
-                
+
                 double physicalLength = calculateDistance(xFrom, yFrom, xTo, yTo);
                 double diameter = morph.findMaxDistance(init, coordinates);
                 int perimeter = morph.calculatePerimeter(edgeImage);
@@ -181,11 +200,139 @@ public class Main extends javax.swing.JFrame {
                 try (FileWriter fw = new FileWriter(filename, true);
                         BufferedWriter bw = new BufferedWriter(fw);
                         PrintWriter out = new PrintWriter(bw)) {
-                    out.println( physicalLength+ " " + diameter + " "
+                    out.println(physicalLength + " " + diameter + " "
                             + perimeter + " " + area);
                 } catch (IOException ex) {
                     //exception handling left as an exercise for the reader
                 }
+            }
+        });
+
+        extractGLCMButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String filename = "F:\\Dataset Text\\glcm-features-manual.txt";
+                Mat color = morph.bufferedImageToMat(imageProcessed);
+                Mat gray = new Mat();
+                Imgproc.cvtColor(color, gray, COLOR_BGR2GRAY);
+
+                BufferedImage grayImage = CobaOpenCV.convertMatToBufferedImage(gray);
+                GLCM glcm = new GLCM();
+
+                double[][] glcmMatrix = glcm.getNormalisedGLCMMatrix(glcm.getGLCMMatrix(grayImage));
+
+                double asm = glcm.angularSecondMoment(glcmMatrix);
+                double contrast = glcm.contrast(glcmMatrix);
+//        double variance = glcm.variance(glcmMatrix);
+                double entropy = glcm.entropy(glcmMatrix);
+                double homogenity = glcm.homogenity(glcmMatrix);
+                double correlation = glcm.correlation(glcmMatrix);
+
+                try (FileWriter fw = new FileWriter(filename, true);
+                        BufferedWriter bw = new BufferedWriter(fw);
+                        PrintWriter out = new PrintWriter(bw)) {
+                    out.println(asm + " " + contrast + " "
+                            + entropy + " " + homogenity + " " + correlation);
+                } catch (IOException ex) {
+                    //exception handling left as an exercise for the reader
+                }
+            }
+        });
+
+        classifyGLCM.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SVM svm = new SVM();
+                try {
+                    double[][] data = getDataFromText("F:\\Dataset Text\\glcm-extracted-dataset-training-5features.txt", 960, 5);
+                    double[][] model = getDataFromText("F:\\Dataset Text\\model\\glcm\\model1-5features.txt", 961, 1);
+
+                    //masih nguji kelas 1
+                    double[] classList = new double[961];
+                    for (int i = 0; i < 30; i++) {
+                        classList[i] = 1;
+                    }
+                    for (int i = 30; i < classList.length - 1; i++) {
+                        classList[i] = -1;
+                    }
+                    classList[960] = 0;
+
+                    double[] rbfTest = svm.createRBFTestMatrix(data, 10, extractGLCMFeatures(imageProcessed));
+                    double[] features = extractGLCMFeatures(imageProcessed);
+                    System.out.println("ASM: " + features[0]);
+                    System.out.println("Contast: " + features[1]);
+                    System.out.println("Entropy: " + features[2]);
+                    System.out.println("Homogenity: " + features[3]);
+                    System.out.println("Correlation: " + features[4]);
+//        for (int i = 0; i < rbfTest.length; i++) {
+//            System.out.println(rbfTest[i]);
+//        }
+                    System.out.println("Model length : " + model[0].length);
+                    System.out.println("Classlist length: " + classList.length);
+                    System.out.println("RBF length : " + rbfTest.length);
+
+                    double result = svm.classify(model, rbfTest, classList);
+                    System.out.println("Result of classification: " + result);
+                    if (result == 1) {
+                        JOptionPane.showMessageDialog(null, "Objek dikenali! Hasil klasifikasi = 1!");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Objek tak dikenali, gagal klasifikasi!");
+                    }
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+        });
+
+        classifyColor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SVM svm = new SVM();
+                try {
+                    double[][] data = getDataFromText("F:\\Dataset Text\\color-extracted-dataset-training.txt", 960, 9);
+                    double[][] model = getDataFromText("F:\\Dataset Text\\model\\color\\model1-sigma5.txt", 961, 1);
+
+                    //masih nguji kelas 1
+                    double[] classList = new double[961];
+                    for (int i = 0; i < 30; i++) {
+                        classList[i] = 1;
+                    }
+                    for (int i = 30; i < classList.length - 1; i++) {
+                        classList[i] = -1;
+                    }
+                    classList[960] = 0;
+
+                    double[] rbfTest = svm.createRBFTestMatrix(data, 5, extractColorFeatures(imageProcessed));
+//        for (int i = 0; i < rbfTest.length; i++) {
+//            System.out.println(rbfTest[i]);
+//        }          
+                    double[] features = extractColorFeatures(imageProcessed);
+                    System.out.println("Mean Red: " + features[0]);
+                    System.out.println("Mean Green: " + features[1]);
+                    System.out.println("Mean Blue: " + features[2]);
+                    System.out.println("Std Dev Red: " + features[3]);
+                    System.out.println("Std Dev Green: " + features[4]);
+                    System.out.println("Std Dev Blue: " + features[5]);
+                    System.out.println("Skewness Red: " + features[6]);
+                    System.out.println("Skewness Green: " + features[7]);
+                    System.out.println("Skewness Blue: " + features[8]);
+
+                    System.out.println("Model length : " + model[0].length);
+                    System.out.println("Classlist length: " + classList.length);
+                    System.out.println("RBF length : " + rbfTest.length);
+
+                    double result = svm.classify(model, rbfTest, classList);
+                    System.out.println("Result of classification: " + result);
+                    if (result == 1) {
+                        JOptionPane.showMessageDialog(null, "Objek dikenali! Hasil klasifikasi = 1!");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Objek tak dikenali, gagal klasifikasi!");
+                    }
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
             }
         });
 
@@ -194,10 +341,55 @@ public class Main extends javax.swing.JFrame {
         add(saveButton);
         add(options);
         add(inputField);
-        add(confirmButton);
-        add(pseudoColorButton);
+        add(extractMorphButton);
+        add(extractGLCMButton);
+        add(classifyColor);
+        add(classifyGLCM);
         addMouseListener(mouseHandler);
         addMouseMotionListener(mouseMotionHandler);
+    }
+
+    public double[] extractGLCMFeatures(BufferedImage input) {
+        Mat color = morph.bufferedImageToMat(input);
+        Mat gray = new Mat();
+        Imgproc.cvtColor(color, gray, COLOR_BGR2GRAY);
+
+        BufferedImage grayImage = CobaOpenCV.convertMatToBufferedImage(gray);
+        GLCM glcm = new GLCM();
+
+        double[][] glcmMatrix = glcm.getNormalisedGLCMMatrix(glcm.getGLCMMatrix(grayImage));
+
+        double asm = glcm.angularSecondMoment(glcmMatrix);
+        double contrast = glcm.contrast(glcmMatrix);
+//        double variance = glcm.variance(glcmMatrix);
+        double entropy = glcm.entropy(glcmMatrix);
+        double homogenity = glcm.homogenity(glcmMatrix);
+        double correlation = glcm.correlation(glcmMatrix);
+
+        double[] features = {asm, contrast, entropy, homogenity, correlation};
+
+        return features;
+    }
+
+    public double[] extractColorFeatures(BufferedImage input) {
+        Mat color = Imgcodecs.imread(currentDirectory);
+        BufferedImage rgbImage = convertMatToBufferedImage(color);
+//        BufferedImage rgbImage = ImageIO.read(new File(path));
+        ColorMoments cm = new ColorMoments();
+        double meanRed = cm.calculateMeanRed(rgbImage);
+        double meanGreen = cm.calculateMeanGreen(rgbImage);
+        double meanBlue = cm.calculateMeanBlue(rgbImage);
+
+        double stdDevRed = cm.calculateStdDevRed(rgbImage, meanRed);
+        double stdDevGreen = cm.calculateStdDevGreen(rgbImage, meanGreen);
+        double stdDevBlue = cm.calculateStdDevBlue(rgbImage, meanBlue);
+
+        double skewRed = cm.calculateSkewnessRed(rgbImage, meanRed);
+        double skewGreen = cm.calculateSkewnessGreen(rgbImage, meanGreen);
+        double skewBlue = cm.calculateSkewnessBlue(rgbImage, meanBlue);
+
+        double[] features = {meanRed, meanGreen, meanBlue, stdDevRed, stdDevGreen, stdDevBlue, skewRed, skewGreen, skewBlue};
+        return features;
     }
 
     public MouseListener mouseHandler = new MouseAdapter() {

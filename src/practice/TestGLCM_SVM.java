@@ -24,7 +24,8 @@ public class TestGLCM_SVM {
 
     public static void main(String[] args) throws FileNotFoundException {
         SVM svm = new SVM();
-        double[][] data = getDataFromText("F:\\Dataset Text\\glcm-extracted-dataset-training.txt",960,6);
+        double[][] data = getDataFromText("F:\\Dataset Text\\glcm-extracted-dataset-training-5features.txt",960,5);
+//        double[][] data = getDataFromText("F:\\Dataset Text\\glcm-extracted-dataset-training.txt",960,6);
 //        for (int i = 0; i < data.length; i++) {
 //            for (int j = 0; j < data[0].length; j++) {
 //                System.out.print(data[i][j]+"\t");
@@ -46,14 +47,19 @@ public class TestGLCM_SVM {
 //            0};
         double[] classList = new double[961];
         for (int i = 0; i < 30; i++) {
+            classList[i] = -1;
+        }
+        for (int i = 30; i < 60; i++) {
             classList[i] = 1;
         }
-        for (int i = 30; i < classList.length-1; i++) {
+        for (int i = 60; i < classList.length-1; i++) {
             classList[i] = -1;
         }
         classList[960] = 0;
         //double[] classList = {1, 1, 1, -1, -1, 0};
         
+        
+        //sigma = 10
         double[][] rbfMatrix = svm.createRBFMatrix(data, 10);
 
 //        System.out.println("Matriks Hasil Perhitungan RBF");
@@ -71,18 +77,18 @@ public class TestGLCM_SVM {
             System.out.println("X-" + i + " = " + solutions.get(i, 0));
         }
         
-//        StringBuilder builder = new StringBuilder();
-//        try {
-//            for (int i = 0; i < linearEquation.length; i++) {
-//                builder.append(solutions.get(i,0));
-//                builder.append(System.getProperty("line.separator"));
-//            }
-//            BufferedWriter writer = new BufferedWriter(new FileWriter("F:\\Dataset Text\\model\\glcm\\model1.txt"));
-//            writer.write(builder.toString());//save the string representation of the board
-//            writer.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        StringBuilder builder = new StringBuilder();
+        try {
+            for (int i = 0; i < linearEquation.length; i++) {
+                builder.append(solutions.get(i,0));
+                builder.append(System.getProperty("line.separator"));
+            }
+            BufferedWriter writer = new BufferedWriter(new FileWriter("F:\\Dataset Text\\model\\glcm\\model2-5features.txt"));
+            writer.write(builder.toString());//save the string representation of the board
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static double[][] getDataFromText(String path, int n, int features) throws FileNotFoundException {

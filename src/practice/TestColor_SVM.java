@@ -39,7 +39,7 @@ public class TestColor_SVM {
         classList[960] = 0;
         //double[] classList = {1, 1, 1, -1, -1, 0};
         
-        double[][] rbfMatrix = svm.createRBFMatrix(data, 3);
+        double[][] rbfMatrix = svm.createRBFMatrix(data, 5);
 
 //        System.out.println("Matriks Hasil Perhitungan RBF");
 //        svm.printMatrix(rbfMatrix);
@@ -62,7 +62,7 @@ public class TestColor_SVM {
                 builder.append(solutions.get(i,0));
                 builder.append(System.getProperty("line.separator"));
             }
-            BufferedWriter writer = new BufferedWriter(new FileWriter("F:\\Dataset Text\\model\\color\\model1.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("F:\\Dataset Text\\model\\color\\model1-sigma5.txt"));
             writer.write(builder.toString());//save the string representation of the board
             writer.close();
         } catch (IOException e) {
