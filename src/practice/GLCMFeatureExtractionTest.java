@@ -29,17 +29,18 @@ public class GLCMFeatureExtractionTest {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
 //        File file = new File("C:\\Users\\user\\Pictures\\Leaf\\FlaviaSamples");
-//        File file = new File("F:\\KULIAH\\TA\\Flavia Training Dataset");
-        File file = new File("F:\\KULIAH\\TA\\Flavia Testing Dataset\\sp2");
+        File file = new File("F:\\KULIAH\\TA\\Flavia Training Dataset");
+//        File file = new File("F:\\KULIAH\\TA\\Flavia Testing Dataset\\sp2");
         File[] listOfFiles = file.listFiles();
 
+//        System.out.println("Length: "+listOfFiles.length);
         StringBuilder builder = new StringBuilder();
         try {
             for (int i = 0; i < listOfFiles.length; i++) {
                 builder.append(processData(listOfFiles[i].getAbsolutePath()));
                 builder.append(System.getProperty("line.separator"));
             }
-            BufferedWriter writer = new BufferedWriter(new FileWriter("F:\\Dataset Text\\glcm-extracted-dataset-testing-5features-2.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("F:\\Dataset Text\\glcm-extracted-dataset-testing-5features-2.csv"));
             writer.write(builder.toString());//save the string representation of the board
             writer.close();
         } catch (IOException e) {
@@ -73,6 +74,6 @@ public class GLCMFeatureExtractionTest {
         double correlation = glcm.correlation(glcmMatrix);
 
 //        return asm + " " + contrast + " " + variance + " " + entropy + " " + homogenity + " " + correlation;
-        return asm + " " + contrast + " " + entropy + " " + homogenity + " " + correlation;
+        return asm + "," + contrast + "," + entropy + "," + homogenity + "," + correlation;
     }
 }

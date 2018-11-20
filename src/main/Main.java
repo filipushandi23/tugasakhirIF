@@ -88,10 +88,13 @@ public class Main extends javax.swing.JFrame {
 
         JButton openButton = new JButton("Open Image");
         JButton saveButton = new JButton("Save Image");
+
+        JButton btnGetLength = new JButton("Get Length Value");
+        JButton btnGetWidth = new JButton("Get Width Value");
         JButton extractMorphButton = new JButton("Extract Morph Features");
         JButton extractGLCMButton = new JButton("Extract GLCM Features");
         JButton classifyGLCM = new JButton("Classify GLCM");
-        JButton classifyColor = new JButton("Classify COlor");
+        JButton classifyColor = new JButton("Classify Color");
 
         String[] items = {"Pubescent Bamboo", "Chinese horse chestnut",
             "Anhui Barberry", "Chinese Redbud", "True Indigo",
@@ -109,16 +112,21 @@ public class Main extends javax.swing.JFrame {
         JTextField inputField = new JTextField();
         inputField.setBounds(50, 200, 220, 30);
 
-        extractMorphButton.setBounds(50, 250, 220, 30);
-        extractMorphButton.setEnabled(false);
         openButton.setBounds(50, 50, 220, 30);
         saveButton.setBounds(50, 100, 220, 30);
-        extractGLCMButton.setBounds(50, 350, 220, 30);
+
+        btnGetLength.setBounds(50, 260, 220, 30);
+        btnGetWidth.setBounds(50, 300, 220, 30);
+
+        extractMorphButton.setBounds(50, 400, 220, 30);
+        extractMorphButton.setEnabled(false);
+
+        extractGLCMButton.setBounds(50, 440, 220, 30);
         extractGLCMButton.setEnabled(false);
 
-        classifyColor.setBounds(50, 400, 220, 30);
+        classifyColor.setBounds(50, 500, 220, 30);
         classifyColor.setEnabled(false);
-        classifyGLCM.setBounds(50, 500, 220, 30);
+        classifyGLCM.setBounds(50, 540, 220, 30);
         classifyGLCM.setEnabled(false);
 
         openButton.addActionListener(new ActionListener() {
@@ -157,7 +165,7 @@ public class Main extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //System.out.println("Click go: "+calculateDistance(xFrom, yFrom, xTo, yTo));
-                String filename = "F:\\Dataset Text\\geometric-features-extracted.txt";
+                String filename = "F:\\Dataset Text\\geometric-features-extracted-test.csv";
                 //System.out.println("CUrr: "+currentDirectory);
 //                Mat color = Imgcodecs.imread(currentDirectory);
                 Mat color = morph.bufferedImageToMat(imageProcessed);
@@ -193,6 +201,7 @@ public class Main extends javax.swing.JFrame {
 //                System.out.println(morph.findMaxDistance(init, coordinates));
 
                 double physicalLength = calculateDistance(xFrom, yFrom, xTo, yTo);
+                double physicalWidth = calculateDistance(xFrom, yFrom, xTo, yTo);
                 double diameter = morph.findMaxDistance(init, coordinates);
                 int perimeter = morph.calculatePerimeter(edgeImage);
                 int area = morph.calculateArea(binaryImage);
@@ -200,18 +209,19 @@ public class Main extends javax.swing.JFrame {
                 try (FileWriter fw = new FileWriter(filename, true);
                         BufferedWriter bw = new BufferedWriter(fw);
                         PrintWriter out = new PrintWriter(bw)) {
-                    out.println(physicalLength + " " + diameter + " "
-                            + perimeter + " " + area);
+                    out.println(physicalLength + "," + physicalWidth + "," + diameter + ","
+                            + perimeter + "," + area + "," + options.getSelectedItem().toString());
                 } catch (IOException ex) {
                     //exception handling left as an exercise for the reader
                 }
+                JOptionPane.showMessageDialog(null, "Data berhasil disimpan!");
             }
         });
 
         extractGLCMButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String filename = "F:\\Dataset Text\\glcm-features-manual.txt";
+                String filename = "F:\\Dataset Text\\glcm-features-test.csv";
                 Mat color = morph.bufferedImageToMat(imageProcessed);
                 Mat gray = new Mat();
                 Imgproc.cvtColor(color, gray, COLOR_BGR2GRAY);
@@ -231,11 +241,12 @@ public class Main extends javax.swing.JFrame {
                 try (FileWriter fw = new FileWriter(filename, true);
                         BufferedWriter bw = new BufferedWriter(fw);
                         PrintWriter out = new PrintWriter(bw)) {
-                    out.println(asm + " " + contrast + " "
-                            + entropy + " " + homogenity + " " + correlation);
+                    out.println(asm + "," + contrast + ","
+                            + entropy + "," + homogenity + "," + correlation + "," + options.getSelectedItem().toString());
                 } catch (IOException ex) {
                     //exception handling left as an exercise for the reader
                 }
+                JOptionPane.showMessageDialog(null, "Data berhasil disimpan!");
             }
         });
 
@@ -244,15 +255,21 @@ public class Main extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 SVM svm = new SVM();
                 try {
+
+                    int kelas = Integer.parseInt(inputField.getText());
+
                     double[][] data = getDataFromText("F:\\Dataset Text\\glcm-extracted-dataset-training-5features.txt", 960, 5);
-                    double[][] model = getDataFromText("F:\\Dataset Text\\model\\glcm\\model1-5features.txt", 961, 1);
+                    double[][] model = getDataFromText("F:\\Dataset Text\\model\\glcm\\model" + kelas + "-5features.txt", 961, 1);
 
                     //masih nguji kelas 1
                     double[] classList = new double[961];
-                    for (int i = 0; i < 30; i++) {
+                    for (int i = 0; i < (kelas - 1) * 30; i++) {
+                        classList[i] = -1;
+                    }
+                    for (int i = (kelas - 1) * 30; i < (kelas * 30); i++) {
                         classList[i] = 1;
                     }
-                    for (int i = 30; i < classList.length - 1; i++) {
+                    for (int i = (kelas * 30); i < classList.length - 1; i++) {
                         classList[i] = -1;
                     }
                     classList[960] = 0;
@@ -345,6 +362,8 @@ public class Main extends javax.swing.JFrame {
         add(extractGLCMButton);
         add(classifyColor);
         add(classifyGLCM);
+        add(btnGetLength);
+        add(btnGetWidth);
         addMouseListener(mouseHandler);
         addMouseMotionListener(mouseMotionHandler);
     }

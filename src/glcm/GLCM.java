@@ -11,33 +11,7 @@ import java.awt.image.BufferedImage;
  *
  * @author Filipus
  */
-public class GLCM {
-   public static void main(String[] args) {
-        double[][] glcm = {
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0.033707865, 0.056179775, 0.028089888, 0, 0, 0},
-            {0, 0, 0.056179775, 0.08988764, 0.06741573, 0.005617978, 0, 0},
-            {0, 0, 0.028089888, 0.06741573, 0.033707865, 0.016853933, 0.005617978, 0.005617978},
-            {0, 0, 0, 0.005617978, 0.016853933, 0.011235955, 0.011235955, 0.011235955},
-            {0, 0, 0, 0, 0.005617978, 0.011235955, 0.011235955, 0.04494382},
-            {0, 0, 0, 0, 0.005617978, 0.011235955, 0.04494382, 0.314606742},};
-
-        System.out.println("Matriks GLCM Normalisasi");
-        for (int i = 0; i < glcm.length; i++) {
-            for (int j = 0; j < glcm.length; j++) {
-                System.out.print(glcm[i][j] + "\t");
-            }
-            System.out.println("");
-        }
-//        System.out.println("Angular second moment = " + angularSecondMoment(glcm));
-//        System.out.println("Contrast = " + contrast(glcm));
-//        System.out.println("Variance = " + variance(glcm));
-//        System.out.println("Entropy = " + entropy(glcm));
-//        System.out.println("Homogenity = " + homogenity(glcm));
-//        System.out.println("Correlation = "+correlation(glcm));
-    }
-   
+public class GLCM { 
     public double[][] getGLCMMatrix(BufferedImage grayImage){
         double[][] glcmMatrix = new double[256][256];
         

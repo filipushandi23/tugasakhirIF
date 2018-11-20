@@ -29,7 +29,7 @@ public class ColorMomentsExtractionTest {
 //        System.out.println(processData(path));
 
 //        File file = new File("C:\\Users\\user\\Pictures\\Leaf\\FlaviaSamples");
-        File file = new File("F:\\KULIAH\\TA\\Flavia Testing Dataset");
+        File file = new File("F:\\KULIAH\\TA\\Flavia Training Dataset");
         File[] listOfFiles = file.listFiles();
 
         StringBuilder builder = new StringBuilder();
@@ -40,7 +40,7 @@ public class ColorMomentsExtractionTest {
             }
 //            BufferedWriter writer = new BufferedWriter(new FileWriter("F:\\Dataset Text\\color-extracted-dataset-training.txt"));
 //            BufferedWriter writer = new BufferedWriter(new FileWriter("F:\\Dataset Text\\color-extracted-dataset-training-2.txt"));
-            BufferedWriter writer = new BufferedWriter(new FileWriter("F:\\Dataset Text\\color-extracted-dataset-testing.txt"));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("F:\\Dataset Text\\color-training.csv"));
             writer.write(builder.toString());//save the string representation of the board
             writer.close();
         } catch (IOException e) {
@@ -69,9 +69,9 @@ public class ColorMomentsExtractionTest {
 //        double kurtosisGreen = cm.calculateKurtosisGreen(rgbImage, meanGreen);
 //        double kurtosisBlue = cm.calculateKurtosisBlue(rgbImage, meanBlue);
 
-        return meanRed + " " + meanGreen + " " + meanBlue
-                + " " + stdDevRed + " " + stdDevGreen + " " + stdDevBlue + " "
-                + skewRed + " " + skewGreen + " " + skewBlue;
+        return meanRed + "," + meanGreen + "," + meanBlue
+                + "," + stdDevRed + "," + stdDevGreen + "," + stdDevBlue + ","
+                + skewRed + "," + skewGreen + "," + skewBlue;
 //        return meanRed + " " + meanGreen + " " + meanBlue
 //                + " " + stdDevRed + " " + stdDevGreen + " " + stdDevBlue + " "
 //                + skewRed + " " + skewGreen + " " + skewBlue + " "
