@@ -70,9 +70,14 @@ public class Main extends javax.swing.JFrame {
     private int yFrom = 0;
     private int xTo = 0;
     private int yTo = 0;
+    private double physicalLength = 0;
+    private double physicalWidth = 0;
+
     private JLabel img;
     static String currentDirectory;
     static String savedDirectory;
+
+    private int counter = 0;
 
     public Main() {
         initComponents();
@@ -96,15 +101,15 @@ public class Main extends javax.swing.JFrame {
         JButton classifyGLCM = new JButton("Classify GLCM");
         JButton classifyColor = new JButton("Classify Color");
 
-        String[] items = {"Pubescent Bamboo", "Chinese horse chestnut",
-            "Anhui Barberry", "Chinese Redbud", "True Indigo",
-            "Japanese Maple", "Nanmu", "Castor Aralia", "Chinese Cinnamon",
-            "Goldenrain Tree", "Big-fruited Holly", "Japanese Cheesewood",
-            "Wintersweet", "Camphortree", "Japan Arrowwood", "Sweet Osmanthus",
-            "Deodar", "Gingko", "Crape Myrtle", "Oleander", "Yew Plum Nine",
-            "Japanese Cherry", "Glossy Privet", "Chinese Toon", "Peach",
-            "Ford Woodlotus", "Trident Maple", "Beale's Barberry",
-            "Southern Magnolia", "Canadian Poplar", "Chinese Tulip Tree", "Tangerine"};
+        String[] items = {"pubescent bamboo", "chinese horse chestnut",
+            "chinese redbud", "true indigo",
+            "japanese maple", "nanmu", "castor aralia", "goldenrain tree", "chinese cinnamon",
+            "anhui barberry", "big fruited holly", "japanese cheesewood",
+            "wintersweet", "camphortree", "japan arrowwood", "sweet osmanthus",
+            "deodar", "gingko", "crepe myrtle", "oleander", "yew plum nine",
+            "japanese flowering cherry", "glossy privet", "chinese toon", "peach",
+            "ford woodlotus", "trident maple", "beals barberry",
+            "southern magnolia", "canadian poplar", "chinese tulip tree", "tangerine"};
 
         JComboBox options = new JComboBox(items);
         options.setBounds(50, 150, 220, 30);
@@ -161,11 +166,29 @@ public class Main extends javax.swing.JFrame {
             }
         });
 
+        btnGetLength.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                physicalLength = calculateDistance(xFrom, yFrom, xTo, yTo);
+                System.out.println("Physical length : " + physicalLength);
+                JOptionPane.showMessageDialog(null, "Panjang fisik didapatkan!");
+            }
+        });
+
+        btnGetWidth.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                physicalWidth = calculateDistance(xFrom, yFrom, xTo, yTo);
+                System.out.println("Physical Width: " + physicalWidth);
+                JOptionPane.showMessageDialog(null, "Lebar fisik didapatkan!");
+            }
+        });
+
         extractMorphButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //System.out.println("Click go: "+calculateDistance(xFrom, yFrom, xTo, yTo));
-                String filename = "F:\\Dataset Text\\geometric-features-extracted-test.csv";
+                String filename = "F:\\Dataset Text\\morphological-features-extracted-training.csv";
                 //System.out.println("CUrr: "+currentDirectory);
 //                Mat color = Imgcodecs.imread(currentDirectory);
                 Mat color = morph.bufferedImageToMat(imageProcessed);
@@ -200,21 +223,32 @@ public class Main extends javax.swing.JFrame {
                 Point init = new Point(xFrom, yFrom);
 //                System.out.println(morph.findMaxDistance(init, coordinates));
 
-                double physicalLength = calculateDistance(xFrom, yFrom, xTo, yTo);
-                double physicalWidth = calculateDistance(xFrom, yFrom, xTo, yTo);
+                //fitur geometri
                 double diameter = morph.findMaxDistance(init, coordinates);
                 int perimeter = morph.calculatePerimeter(edgeImage);
                 int area = morph.calculateArea(binaryImage);
 
+                //fitur morfologi
+                double aspectRatio = physicalLength / physicalWidth;
+                double formFactor = area / Math.pow(perimeter, 2);
+                double narrowFactor = diameter / physicalLength;
+                double rectangularity = (physicalLength * physicalWidth) / area;
+                double perimeterRatioOfDiameter = perimeter / diameter;
+                double perimeterRatioOfLengthAndWidth = perimeter / (physicalLength + physicalWidth);
+
                 try (FileWriter fw = new FileWriter(filename, true);
                         BufferedWriter bw = new BufferedWriter(fw);
                         PrintWriter out = new PrintWriter(bw)) {
-                    out.println(physicalLength + "," + physicalWidth + "," + diameter + ","
-                            + perimeter + "," + area + "," + options.getSelectedItem().toString());
+                    out.println(aspectRatio + "," + formFactor + "," + narrowFactor + ","
+                            + rectangularity + "," + perimeterRatioOfDiameter + ","
+                            + perimeterRatioOfLengthAndWidth
+                            + "," + options.getSelectedItem().toString());
                 } catch (IOException ex) {
                     //exception handling left as an exercise for the reader
                 }
                 JOptionPane.showMessageDialog(null, "Data berhasil disimpan!");
+                counter++;
+                System.out.println(counter + " Data berhasil disimpan!");
             }
         });
 
