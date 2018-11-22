@@ -1,0 +1,686 @@
+Pengujian klasifikasi 32 spesies dengan fitur Morfologi + GLCM + warna.
+
+Ketentuan Training:
+1. Data training terdiri dari 32 spesies
+2. Tiap spesies mempunyai data training sebanyak 30 buah.
+3. Total data training berjumlah 960 buah.
+4. Format data training bisa berupa CSV atau ARFF.
+
+Ketentuan testing:
+1. Data testing terdiri dari 32 spesies
+2. Tiap spesies mempunyai data testing sebanyak 10 buah.
+3. Total data testing berjumlah 320 buah.
+4. Format data testing berupa ARFF.
+
+Fitur yang digunakan adalah fitur Morfologi + GLCM + Warna yang terdiri dari:
+1. Aspect Ratio
+2. Form Factor
+3. Narrow Factor
+4. Rectangularity
+5. Perimeter Ratio of Diameter
+6. Perimeter Ratio of Physiological Length and width
+
+7. Angular Second Moment 
+8. Correlation
+9. Entropy
+10. Homogeneity
+11. Contrast
+
+12. Mean Red, Mean Green, Mean Blue
+15. Std Dev Red, StdDev Green, StdDev blue
+18. Skewness Red, Skewness Green, Skewness blue
+
+Jadi total fitur ada 20 fitur.
+
+Pengujian dilakukan dengan menggunakan metode SVM - SMO di Weka dengan RBF kernel.
+
+nilai sigma/gamma yg diujikan adalah : 1, 10, 20, 25, 50, 100, 200
+
+
+Pengujian pertama (nilai sigma=1)
+=== Evaluation on test set ===
+
+Time taken to test model on supplied test set: 0.3 seconds
+
+=== Summary ===
+
+Correctly Classified Instances         245               76.5625 %
+Incorrectly Classified Instances        75               23.4375 %
+Kappa statistic                          0.7581
+Mean absolute error                      0.0586
+Root mean squared error                  0.1694
+Relative absolute error                 96.86   %
+Root relative squared error             97.3881 %
+Total Number of Instances              320     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.500    0.006    0.714      0.500    0.588      0.587    0.977     0.516     pubescent bamboo
+                 0.800    0.026    0.500      0.800    0.615      0.618    0.985     0.514     chinese horse chestnut
+                 0.900    0.000    1.000      0.900    0.947      0.947    0.997     0.950     chinese redbud
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     true indigo
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     japanese maple
+                 0.800    0.013    0.667      0.800    0.727      0.721    0.989     0.620     nanmu
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     castor aralia
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     goldenrain tree
+                 0.500    0.013    0.556      0.500    0.526      0.513    0.964     0.399     chinese cinnamon
+                 0.900    0.003    0.900      0.900    0.900      0.897    0.992     0.836     anhui barberry
+                 0.300    0.013    0.429      0.300    0.353      0.341    0.975     0.466     big fruited holly
+                 0.700    0.013    0.636      0.700    0.667      0.656    0.967     0.532     japanese cheesewood
+                 0.600    0.035    0.353      0.600    0.444      0.438    0.953     0.267     wintersweet
+                 0.800    0.000    1.000      0.800    0.889      0.892    0.991     0.874     camphortree
+                 0.800    0.003    0.889      0.800    0.842      0.839    0.995     0.811     japan arrowwood
+                 0.800    0.003    0.889      0.800    0.842      0.839    0.995     0.899     sweet osmanthus
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     deodar
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     gingko
+                 0.800    0.010    0.727      0.800    0.762      0.755    0.994     0.725     crepe myrtle
+                 0.700    0.000    1.000      0.700    0.824      0.833    0.995     0.892     oleander
+                 1.000    0.019    0.625      1.000    0.769      0.783    0.990     0.625     yew plum pine
+                 0.000    0.000    ?          0.000    ?          ?        0.923     0.316     japanese flowering cherry
+                 0.700    0.010    0.700      0.700    0.700      0.690    0.990     0.633     glossy privet
+                 1.000    0.013    0.714      1.000    0.833      0.840    0.994     0.714     chinese toon
+                 0.600    0.010    0.667      0.600    0.632      0.621    0.969     0.508     peach
+                 0.500    0.006    0.714      0.500    0.588      0.587    0.988     0.595     ford woodlotus
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     trident maple
+                 0.400    0.016    0.444      0.400    0.421      0.404    0.957     0.321     beals barberry
+                 0.900    0.013    0.692      0.900    0.783      0.782    0.992     0.671     southern mongolia
+                 1.000    0.003    0.909      1.000    0.952      0.952    0.998     0.909     canadian bipolar
+                 0.700    0.000    1.000      0.700    0.824      0.833    0.959     0.761     chinese tulip tree
+                 0.800    0.013    0.667      0.800    0.727      0.721    0.990     0.624     tangerine
+Weighted Avg.    0.766    0.008    ?          0.766    ?          ?        0.985     0.718     
+
+=== Confusion Matrix ===
+
+  a  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r  s  t  u  v  w  x  y  z aa ab ac ad ae af   <-- classified as
+  5  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  5  0  0  0  0  0  0  0  0  0  0  0 |  a = pubescent bamboo
+  0  8  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0 |  b = chinese horse chestnut
+  0  0  9  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  c = chinese redbud
+  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  d = true indigo
+  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  e = japanese maple
+  0  0  0  0  0  8  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  f = nanmu
+  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  g = castor aralia
+  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  h = goldenrain tree
+  1  0  0  0  0  3  0  0  5  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  i = chinese cinnamon
+  0  0  0  0  0  0  0  0  1  9  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  j = anhui barberry
+  0  0  0  0  0  0  0  0  0  0  3  0  7  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  k = big fruited holly
+  0  0  0  0  0  1  0  0  0  0  0  7  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  1 |  l = japanese cheesewood
+  0  0  0  0  0  0  0  0  0  0  2  0  6  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  1  0  0 |  m = wintersweet
+  0  1  0  0  0  0  0  0  0  0  0  0  0  8  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0 |  n = camphortree
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  8  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0 |  o = japan arrowwood
+  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  8  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0 |  p = sweet osmanthus
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  q = deodar
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  r = gingko
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  8  0  0  0  2  0  0  0  0  0  0  0  0  0 |  s = crepe myrtle
+  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  7  1  0  0  0  0  1  0  0  0  0  0  0 |  t = oleander
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0 |  u = yew plum pine
+  0  5  0  0  0  0  0  0  0  0  2  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1 |  v = japanese flowering cherry
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  3  0  0  0  7  0  0  0  0  0  0  0  0  0 |  w = glossy privet
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0 |  x = chinese toon
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  6  0  0  0  0  0  0  0 |  y = peach
+  0  0  0  0  0  0  0  0  1  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  5  0  0  0  0  0  0 |  z = ford woodlotus
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0 | aa = trident maple
+  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  1  0  0  4  0  0  0  2 | ab = beals barberry
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  9  0  0  0 | ac = southern mongolia
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0 | ad = canadian bipolar
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  2  0  0  7  0 | ae = chinese tulip tree
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  1  0  0  0  8 | af = tangerine
+
+
+Pengujian kedua(nilai sigma=10)
+=== Evaluation on test set ===
+
+Time taken to test model on supplied test set: 0.46 seconds
+
+=== Summary ===
+
+Correctly Classified Instances         281               87.8125 %
+Incorrectly Classified Instances        39               12.1875 %
+Kappa statistic                          0.8742
+Mean absolute error                      0.0586
+Root mean squared error                  0.1694
+Relative absolute error                 96.8516 %
+Root relative squared error             97.3881 %
+Total Number of Instances              320     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.800    0.000    1.000      0.800    0.889      0.892    0.957     0.824     pubescent bamboo
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     chinese horse chestnut
+                 0.900    0.000    1.000      0.900    0.947      0.947    1.000     1.000     chinese redbud
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     true indigo
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     japanese maple
+                 0.900    0.013    0.692      0.900    0.783      0.782    0.992     0.673     nanmu
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     castor aralia
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     goldenrain tree
+                 0.600    0.006    0.750      0.600    0.667      0.661    0.974     0.548     chinese cinnamon
+                 0.900    0.010    0.750      0.900    0.818      0.815    0.991     0.713     anhui barberry
+                 0.800    0.010    0.727      0.800    0.762      0.755    0.983     0.633     big fruited holly
+                 0.700    0.000    1.000      0.700    0.824      0.833    0.987     0.823     japanese cheesewood
+                 0.800    0.013    0.667      0.800    0.727      0.721    0.977     0.577     wintersweet
+                 0.800    0.000    1.000      0.800    0.889      0.892    0.995     0.889     camphortree
+                 0.900    0.003    0.900      0.900    0.900      0.897    0.997     0.858     japan arrowwood
+                 0.900    0.016    0.643      0.900    0.750      0.752    0.992     0.669     sweet osmanthus
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     deodar
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     gingko
+                 0.900    0.003    0.900      0.900    0.900      0.897    0.998     0.881     crepe myrtle
+                 0.800    0.000    1.000      0.800    0.889      0.892    1.000     0.982     oleander
+                 1.000    0.003    0.909      1.000    0.952      0.952    0.998     0.909     yew plum pine
+                 0.500    0.003    0.833      0.500    0.625      0.637    0.964     0.548     japanese flowering cherry
+                 0.900    0.006    0.818      0.900    0.857      0.853    0.993     0.778     glossy privet
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     chinese toon
+                 0.900    0.006    0.818      0.900    0.857      0.853    0.980     0.750     peach
+                 0.900    0.003    0.900      0.900    0.900      0.897    0.996     0.852     ford woodlotus
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     trident maple
+                 0.700    0.013    0.636      0.700    0.667      0.656    0.987     0.576     beals barberry
+                 0.900    0.010    0.750      0.900    0.818      0.815    0.994     0.725     southern mongolia
+                 1.000    0.003    0.909      1.000    0.952      0.952    0.998     0.909     canadian bipolar
+                 0.700    0.000    1.000      0.700    0.824      0.833    0.976     0.772     chinese tulip tree
+                 0.900    0.003    0.900      0.900    0.900      0.897    0.996     0.860     tangerine
+Weighted Avg.    0.878    0.004    0.891      0.878    0.878      0.877    0.991     0.836     
+
+=== Confusion Matrix ===
+
+  a  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r  s  t  u  v  w  x  y  z aa ab ac ad ae af   <-- classified as
+  8  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  a = pubescent bamboo
+  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  b = chinese horse chestnut
+  0  0  9  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  c = chinese redbud
+  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  d = true indigo
+  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  e = japanese maple
+  0  0  0  0  0  9  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  f = nanmu
+  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  g = castor aralia
+  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  h = goldenrain tree
+  0  0  0  0  0  2  0  0  6  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0 |  i = chinese cinnamon
+  0  0  0  0  0  1  0  0  0  9  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  j = anhui barberry
+  0  0  0  0  0  0  0  0  0  0  8  0  1  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  k = big fruited holly
+  0  0  0  0  0  1  0  0  0  0  0  7  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  1  0  0  0 |  l = japanese cheesewood
+  0  0  0  0  0  0  0  0  0  0  1  0  8  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0 |  m = wintersweet
+  0  0  0  0  0  0  0  0  0  0  0  0  0  8  0  1  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0 |  n = camphortree
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  9  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0 |  o = japan arrowwood
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  9  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0 |  p = sweet osmanthus
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  q = deodar
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  r = gingko
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  9  0  0  0  1  0  0  0  0  0  0  0  0  0 |  s = crepe myrtle
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  8  1  0  0  0  0  1  0  0  0  0  0  0 |  t = oleander
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0 |  u = yew plum pine
+  0  0  0  0  0  0  0  0  0  0  2  0  2  0  0  0  0  0  0  0  0  5  0  0  0  0  0  0  0  0  0  1 |  v = japanese flowering cherry
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  9  0  0  0  0  0  0  0  0  0 |  w = glossy privet
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0 |  x = chinese toon
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  9  0  0  0  0  0  0  0 |  y = peach
+  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  9  0  0  0  0  0  0 |  z = ford woodlotus
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0 | aa = trident maple
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0  0  0  0  0  0  0  7  0  0  0  0 | ab = beals barberry
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  9  0  0  0 | ac = southern mongolia
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0 | ad = canadian bipolar
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  2  0  0  7  0 | ae = chinese tulip tree
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  9 | af = tangerine
+
+
+
+Pengujian ketiga (nilai sigma=20)
+=== Evaluation on test set ===
+
+Time taken to test model on supplied test set: 0.62 seconds
+
+=== Summary ===
+
+Correctly Classified Instances         279               87.1875 %
+Incorrectly Classified Instances        41               12.8125 %
+Kappa statistic                          0.8677
+Mean absolute error                      0.0587
+Root mean squared error                  0.1695
+Relative absolute error                 96.8796 %
+Root relative squared error             97.4181 %
+Total Number of Instances              320     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.800    0.000    1.000      0.800    0.889      0.892    0.863     0.807     pubescent bamboo
+                 0.900    0.000    1.000      0.900    0.947      0.947    0.999     0.963     chinese horse chestnut
+                 0.900    0.000    1.000      0.900    0.947      0.947    1.000     1.000     chinese redbud
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     true indigo
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     japanese maple
+                 0.900    0.013    0.692      0.900    0.783      0.782    0.992     0.673     nanmu
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     castor aralia
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     goldenrain tree
+                 0.700    0.003    0.875      0.700    0.778      0.777    0.984     0.698     chinese cinnamon
+                 0.900    0.000    1.000      0.900    0.947      0.947    0.998     0.959     anhui barberry
+                 0.800    0.010    0.727      0.800    0.762      0.755    0.988     0.654     big fruited holly
+                 0.700    0.000    1.000      0.700    0.824      0.833    0.991     0.847     japanese cheesewood
+                 0.800    0.013    0.667      0.800    0.727      0.721    0.960     0.562     wintersweet
+                 0.800    0.003    0.889      0.800    0.842      0.839    0.995     0.811     camphortree
+                 0.800    0.013    0.667      0.800    0.727      0.721    0.963     0.552     japan arrowwood
+                 0.800    0.016    0.615      0.800    0.696      0.691    0.988     0.583     sweet osmanthus
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     deodar
+                 0.900    0.000    1.000      0.900    0.947      0.947    0.999     0.983     gingko
+                 0.900    0.003    0.900      0.900    0.900      0.897    0.998     0.881     crepe myrtle
+                 0.800    0.000    1.000      0.800    0.889      0.892    0.999     0.967     oleander
+                 1.000    0.003    0.909      1.000    0.952      0.952    0.998     0.909     yew plum pine
+                 0.500    0.003    0.833      0.500    0.625      0.637    0.975     0.569     japanese flowering cherry
+                 0.900    0.006    0.818      0.900    0.857      0.853    0.992     0.772     glossy privet
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     chinese toon
+                 0.900    0.010    0.750      0.900    0.818      0.815    0.980     0.691     peach
+                 1.000    0.003    0.909      1.000    0.952      0.952    0.998     0.909     ford woodlotus
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     trident maple
+                 0.700    0.013    0.636      0.700    0.667      0.656    0.985     0.567     beals barberry
+                 0.900    0.013    0.692      0.900    0.783      0.782    0.992     0.676     southern mongolia
+                 1.000    0.003    0.909      1.000    0.952      0.952    0.998     0.909     canadian bipolar
+                 0.700    0.000    1.000      0.700    0.824      0.833    0.990     0.824     chinese tulip tree
+                 0.900    0.003    0.900      0.900    0.900      0.897    0.989     0.834     tangerine
+Weighted Avg.    0.872    0.004    0.887      0.872    0.873      0.872    0.988     0.831     
+
+=== Confusion Matrix ===
+
+  a  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r  s  t  u  v  w  x  y  z aa ab ac ad ae af   <-- classified as
+  8  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  a = pubescent bamboo
+  0  9  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0 |  b = chinese horse chestnut
+  0  0  9  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  c = chinese redbud
+  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  d = true indigo
+  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  e = japanese maple
+  0  0  0  0  0  9  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  f = nanmu
+  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  g = castor aralia
+  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  h = goldenrain tree
+  0  0  0  0  0  2  0  0  7  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0 |  i = chinese cinnamon
+  0  0  0  0  0  1  0  0  0  9  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  j = anhui barberry
+  0  0  0  0  0  0  0  0  0  0  8  0  1  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  k = big fruited holly
+  0  0  0  0  0  1  0  0  0  0  0  7  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  1  0  0  0 |  l = japanese cheesewood
+  0  0  0  0  0  0  0  0  0  0  1  0  8  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0 |  m = wintersweet
+  0  0  0  0  0  0  0  0  0  0  0  0  0  8  0  1  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0 |  n = camphortree
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  8  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0 |  o = japan arrowwood
+  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  8  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0 |  p = sweet osmanthus
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  q = deodar
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  9  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  r = gingko
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  9  0  0  0  1  0  0  0  0  0  0  0  0  0 |  s = crepe myrtle
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  8  1  0  0  0  0  1  0  0  0  0  0  0 |  t = oleander
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0 |  u = yew plum pine
+  0  0  0  0  0  0  0  0  0  0  2  0  2  0  0  0  0  0  0  0  0  5  0  0  0  0  0  0  0  0  0  1 |  v = japanese flowering cherry
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  9  0  0  0  0  0  0  0  0  0 |  w = glossy privet
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0 |  x = chinese toon
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  9  0  0  0  0  0  0  0 |  y = peach
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0 |  z = ford woodlotus
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0 | aa = trident maple
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0  0  0  0  0  0  0  7  0  0  0  0 | ab = beals barberry
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  9  0  0  0 | ac = southern mongolia
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0 | ad = canadian bipolar
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  2  0  0  7  0 | ae = chinese tulip tree
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  9 | af = tangerine
+
+
+
+Pengujian keempat (nilai sigma=25)
+=== Evaluation on test set ===
+
+Time taken to test model on supplied test set: 0.69 seconds
+
+=== Summary ===
+
+Correctly Classified Instances         274               85.625  %
+Incorrectly Classified Instances        46               14.375  %
+Kappa statistic                          0.8516
+Mean absolute error                      0.0587
+Root mean squared error                  0.1696
+Relative absolute error                 96.9075 %
+Root relative squared error             97.447  %
+Total Number of Instances              320     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.800    0.000    1.000      0.800    0.889      0.892    0.898     0.807     pubescent bamboo
+                 0.900    0.000    1.000      0.900    0.947      0.947    0.999     0.959     chinese horse chestnut
+                 0.800    0.000    1.000      0.800    0.889      0.892    0.999     0.983     chinese redbud
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     true indigo
+                 0.900    0.000    1.000      0.900    0.947      0.947    1.000     1.000     japanese maple
+                 0.900    0.013    0.692      0.900    0.783      0.782    0.992     0.676     nanmu
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     castor aralia
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     goldenrain tree
+                 0.700    0.003    0.875      0.700    0.778      0.777    0.986     0.711     chinese cinnamon
+                 0.900    0.000    1.000      0.900    0.947      0.947    0.999     0.971     anhui barberry
+                 0.800    0.010    0.727      0.800    0.762      0.755    0.989     0.664     big fruited holly
+                 0.700    0.000    1.000      0.700    0.824      0.833    0.990     0.853     japanese cheesewood
+                 0.800    0.010    0.727      0.800    0.762      0.755    0.962     0.610     wintersweet
+                 0.800    0.003    0.889      0.800    0.842      0.839    0.993     0.797     camphortree
+                 0.800    0.029    0.471      0.800    0.593      0.598    0.946     0.414     japan arrowwood
+                 0.800    0.019    0.571      0.800    0.667      0.664    0.983     0.526     sweet osmanthus
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     deodar
+                 0.900    0.000    1.000      0.900    0.947      0.947    1.000     0.991     gingko
+                 0.900    0.003    0.900      0.900    0.900      0.897    0.998     0.887     crepe myrtle
+                 0.800    0.000    1.000      0.800    0.889      0.892    1.000     0.982     oleander
+                 1.000    0.003    0.909      1.000    0.952      0.952    0.998     0.909     yew plum pine
+                 0.500    0.003    0.833      0.500    0.625      0.637    0.969     0.565     japanese flowering cherry
+                 0.900    0.003    0.900      0.900    0.900      0.897    0.994     0.844     glossy privet
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     chinese toon
+                 0.900    0.013    0.692      0.900    0.783      0.782    0.975     0.637     peach
+                 0.900    0.003    0.900      0.900    0.900      0.897    0.995     0.844     ford woodlotus
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     trident maple
+                 0.600    0.010    0.667      0.600    0.632      0.621    0.985     0.572     beals barberry
+                 0.900    0.013    0.692      0.900    0.783      0.782    0.992     0.676     southern mongolia
+                 0.900    0.006    0.818      0.900    0.857      0.853    0.994     0.770     canadian bipolar
+                 0.700    0.000    1.000      0.700    0.824      0.833    0.993     0.849     chinese tulip tree
+                 0.900    0.003    0.900      0.900    0.900      0.897    0.988     0.833     tangerine
+Weighted Avg.    0.856    0.005    0.880      0.856    0.860      0.860    0.988     0.823     
+
+=== Confusion Matrix ===
+
+  a  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r  s  t  u  v  w  x  y  z aa ab ac ad ae af   <-- classified as
+  8  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  a = pubescent bamboo
+  0  9  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0 |  b = chinese horse chestnut
+  0  0  8  0  0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  c = chinese redbud
+  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  d = true indigo
+  0  0  0  0  9  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  e = japanese maple
+  0  0  0  0  0  9  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  f = nanmu
+  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  g = castor aralia
+  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  h = goldenrain tree
+  0  0  0  0  0  2  0  0  7  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0 |  i = chinese cinnamon
+  0  0  0  0  0  1  0  0  0  9  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  j = anhui barberry
+  0  0  0  0  0  0  0  0  0  0  8  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  k = big fruited holly
+  0  0  0  0  0  1  0  0  0  0  0  7  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  1  0  0  0 |  l = japanese cheesewood
+  0  0  0  0  0  0  0  0  0  0  1  0  8  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0 |  m = wintersweet
+  0  0  0  0  0  0  0  0  0  0  0  0  0  8  0  1  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0 |  n = camphortree
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  8  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0 |  o = japan arrowwood
+  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  8  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0 |  p = sweet osmanthus
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  q = deodar
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  9  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  r = gingko
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  9  0  0  0  1  0  0  0  0  0  0  0  0  0 |  s = crepe myrtle
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  8  1  0  0  0  0  1  0  0  0  0  0  0 |  t = oleander
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0 |  u = yew plum pine
+  0  0  0  0  0  0  0  0  0  0  2  0  2  0  0  0  0  0  0  0  0  5  0  0  0  0  0  0  0  0  0  1 |  v = japanese flowering cherry
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  9  0  0  0  0  0  0  0  0  0 |  w = glossy privet
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0 |  x = chinese toon
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  9  0  0  0  0  0  0  0 |  y = peach
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  9  0  0  0  0  0  0 |  z = ford woodlotus
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0 | aa = trident maple
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0  0  0  0  1  0  0  6  0  0  0  0 | ab = beals barberry
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  9  0  0  0 | ac = southern mongolia
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  9  0  0 | ad = canadian bipolar
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  1  0  1  7  0 | ae = chinese tulip tree
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  9 | af = tangerine
+
+
+
+
+Pengujian kelima (nilai sigma=50)
+=== Evaluation on test set ===
+
+Time taken to test model on supplied test set: 0.83 seconds
+
+=== Summary ===
+
+Correctly Classified Instances         249               77.8125 %
+Incorrectly Classified Instances        71               22.1875 %
+Kappa statistic                          0.771 
+Mean absolute error                      0.0588
+Root mean squared error                  0.1699
+Relative absolute error                 97.1013 %
+Root relative squared error             97.6458 %
+Total Number of Instances              320     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.800    0.000    1.000      0.800    0.889      0.892    0.909     0.807     pubescent bamboo
+                 0.900    0.000    1.000      0.900    0.947      0.947    0.999     0.963     chinese horse chestnut
+                 0.800    0.000    1.000      0.800    0.889      0.892    0.999     0.967     chinese redbud
+                 0.600    0.000    1.000      0.600    0.750      0.770    1.000     1.000     true indigo
+                 0.800    0.000    1.000      0.800    0.889      0.892    1.000     1.000     japanese maple
+                 0.800    0.006    0.800      0.800    0.800      0.794    0.990     0.726     nanmu
+                 0.800    0.000    1.000      0.800    0.889      0.892    1.000     1.000     castor aralia
+                 0.800    0.000    1.000      0.800    0.889      0.892    0.999     0.977     goldenrain tree
+                 0.800    0.006    0.800      0.800    0.800      0.794    0.992     0.737     chinese cinnamon
+                 0.800    0.000    1.000      0.800    0.889      0.892    0.999     0.973     anhui barberry
+                 0.400    0.006    0.667      0.400    0.500      0.505    0.985     0.565     big fruited holly
+                 0.600    0.000    1.000      0.600    0.750      0.770    0.993     0.863     japanese cheesewood
+                 0.700    0.010    0.700      0.700    0.700      0.690    0.942     0.562     wintersweet
+                 0.800    0.000    1.000      0.800    0.889      0.892    0.990     0.877     camphortree
+                 0.800    0.139    0.157      0.800    0.262      0.314    0.862     0.134     japan arrowwood
+                 0.800    0.016    0.615      0.800    0.696      0.691    0.972     0.550     sweet osmanthus
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     deodar
+                 0.700    0.000    1.000      0.700    0.824      0.833    0.986     0.911     gingko
+                 0.700    0.003    0.875      0.700    0.778      0.777    0.983     0.722     crepe myrtle
+                 0.800    0.000    1.000      0.800    0.889      0.892    1.000     1.000     oleander
+                 1.000    0.003    0.909      1.000    0.952      0.952    0.998     0.909     yew plum pine
+                 0.600    0.003    0.857      0.600    0.706      0.710    0.969     0.679     japanese flowering cherry
+                 0.900    0.003    0.900      0.900    0.900      0.897    0.984     0.820     glossy privet
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     chinese toon
+                 0.700    0.010    0.700      0.700    0.700      0.690    0.962     0.586     peach
+                 0.900    0.003    0.900      0.900    0.900      0.897    0.976     0.818     ford woodlotus
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     trident maple
+                 0.600    0.006    0.750      0.600    0.667      0.661    0.935     0.612     beals barberry
+                 0.600    0.013    0.600      0.600    0.600      0.587    0.989     0.603     southern mongolia
+                 0.800    0.000    1.000      0.800    0.889      0.892    0.989     0.904     canadian bipolar
+                 0.700    0.000    1.000      0.700    0.824      0.833    0.949     0.741     chinese tulip tree
+                 0.900    0.000    1.000      0.900    0.947      0.947    0.986     0.918     tangerine
+Weighted Avg.    0.778    0.007    0.882      0.778    0.813      0.815    0.979     0.810     
+
+=== Confusion Matrix ===
+
+  a  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r  s  t  u  v  w  x  y  z aa ab ac ad ae af   <-- classified as
+  8  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  a = pubescent bamboo
+  0  9  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0 |  b = chinese horse chestnut
+  0  0  8  0  0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  c = chinese redbud
+  0  0  0  6  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  d = true indigo
+  0  0  0  0  8  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  e = japanese maple
+  0  0  0  0  0  8  0  0  1  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  f = nanmu
+  0  0  0  0  0  0  8  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  g = castor aralia
+  0  0  0  0  0  0  0  8  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  h = goldenrain tree
+  0  0  0  0  0  1  0  0  8  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0 |  i = chinese cinnamon
+  0  0  0  0  0  0  0  0  1  8  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  j = anhui barberry
+  0  0  0  0  0  0  0  0  0  0  4  0  0  0  4  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  k = big fruited holly
+  0  0  0  0  0  1  0  0  0  0  0  6  0  0  1  0  0  0  0  0  0  0  0  0  1  0  0  0  1  0  0  0 |  l = japanese cheesewood
+  0  0  0  0  0  0  0  0  0  0  0  0  7  0  3  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  m = wintersweet
+  0  0  0  0  0  0  0  0  0  0  0  0  0  8  0  1  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0 |  n = camphortree
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  8  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0 |  o = japan arrowwood
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  8  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0 |  p = sweet osmanthus
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  q = deodar
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  3  0  0  7  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  r = gingko
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  7  0  0  0  1  0  0  0  0  0  0  0  0  0 |  s = crepe myrtle
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  8  1  0  0  0  0  1  0  0  0  0  0  0 |  t = oleander
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0 |  u = yew plum pine
+  0  0  0  0  0  0  0  0  0  0  2  0  2  0  0  0  0  0  0  0  0  6  0  0  0  0  0  0  0  0  0  0 |  v = japanese flowering cherry
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  9  0  0  0  0  0  0  0  0  0 |  w = glossy privet
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0 |  x = chinese toon
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0  0  0  0  0  7  0  0  0  0  0  0  0 |  y = peach
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  9  0  0  0  0  0  0 |  z = ford woodlotus
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0 | aa = trident maple
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  2  0  0  0  0  0  1  0  0  0  0  0  6  0  0  0  0 | ab = beals barberry
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  6  0  0  0 | ac = southern mongolia
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  8  0  0 | ad = canadian bipolar
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  7  0 | ae = chinese tulip tree
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  9 | af = tangerine
+
+
+
+Pengujian keenam (nilai sigma=100)
+=== Evaluation on test set ===
+
+Time taken to test model on supplied test set: 0.83 seconds
+
+=== Summary ===
+
+Correctly Classified Instances         249               77.8125 %
+Incorrectly Classified Instances        71               22.1875 %
+Kappa statistic                          0.771 
+Mean absolute error                      0.0588
+Root mean squared error                  0.1699
+Relative absolute error                 97.1013 %
+Root relative squared error             97.6458 %
+Total Number of Instances              320     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.800    0.000    1.000      0.800    0.889      0.892    0.909     0.807     pubescent bamboo
+                 0.900    0.000    1.000      0.900    0.947      0.947    0.999     0.963     chinese horse chestnut
+                 0.800    0.000    1.000      0.800    0.889      0.892    0.999     0.967     chinese redbud
+                 0.600    0.000    1.000      0.600    0.750      0.770    1.000     1.000     true indigo
+                 0.800    0.000    1.000      0.800    0.889      0.892    1.000     1.000     japanese maple
+                 0.800    0.006    0.800      0.800    0.800      0.794    0.990     0.726     nanmu
+                 0.800    0.000    1.000      0.800    0.889      0.892    1.000     1.000     castor aralia
+                 0.800    0.000    1.000      0.800    0.889      0.892    0.999     0.977     goldenrain tree
+                 0.800    0.006    0.800      0.800    0.800      0.794    0.992     0.737     chinese cinnamon
+                 0.800    0.000    1.000      0.800    0.889      0.892    0.999     0.973     anhui barberry
+                 0.400    0.006    0.667      0.400    0.500      0.505    0.985     0.565     big fruited holly
+                 0.600    0.000    1.000      0.600    0.750      0.770    0.993     0.863     japanese cheesewood
+                 0.700    0.010    0.700      0.700    0.700      0.690    0.942     0.562     wintersweet
+                 0.800    0.000    1.000      0.800    0.889      0.892    0.990     0.877     camphortree
+                 0.800    0.139    0.157      0.800    0.262      0.314    0.862     0.134     japan arrowwood
+                 0.800    0.016    0.615      0.800    0.696      0.691    0.972     0.550     sweet osmanthus
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     deodar
+                 0.700    0.000    1.000      0.700    0.824      0.833    0.986     0.911     gingko
+                 0.700    0.003    0.875      0.700    0.778      0.777    0.983     0.722     crepe myrtle
+                 0.800    0.000    1.000      0.800    0.889      0.892    1.000     1.000     oleander
+                 1.000    0.003    0.909      1.000    0.952      0.952    0.998     0.909     yew plum pine
+                 0.600    0.003    0.857      0.600    0.706      0.710    0.969     0.679     japanese flowering cherry
+                 0.900    0.003    0.900      0.900    0.900      0.897    0.984     0.820     glossy privet
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     chinese toon
+                 0.700    0.010    0.700      0.700    0.700      0.690    0.962     0.586     peach
+                 0.900    0.003    0.900      0.900    0.900      0.897    0.976     0.818     ford woodlotus
+                 1.000    0.000    1.000      1.000    1.000      1.000    1.000     1.000     trident maple
+                 0.600    0.006    0.750      0.600    0.667      0.661    0.935     0.612     beals barberry
+                 0.600    0.013    0.600      0.600    0.600      0.587    0.989     0.603     southern mongolia
+                 0.800    0.000    1.000      0.800    0.889      0.892    0.989     0.904     canadian bipolar
+                 0.700    0.000    1.000      0.700    0.824      0.833    0.949     0.741     chinese tulip tree
+                 0.900    0.000    1.000      0.900    0.947      0.947    0.986     0.918     tangerine
+Weighted Avg.    0.778    0.007    0.882      0.778    0.813      0.815    0.979     0.810     
+
+=== Confusion Matrix ===
+
+  a  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r  s  t  u  v  w  x  y  z aa ab ac ad ae af   <-- classified as
+  8  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  a = pubescent bamboo
+  0  9  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0 |  b = chinese horse chestnut
+  0  0  8  0  0  0  0  0  0  0  0  0  1  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  c = chinese redbud
+  0  0  0  6  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  d = true indigo
+  0  0  0  0  8  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  e = japanese maple
+  0  0  0  0  0  8  0  0  1  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  f = nanmu
+  0  0  0  0  0  0  8  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  g = castor aralia
+  0  0  0  0  0  0  0  8  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  h = goldenrain tree
+  0  0  0  0  0  1  0  0  8  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0 |  i = chinese cinnamon
+  0  0  0  0  0  0  0  0  1  8  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  j = anhui barberry
+  0  0  0  0  0  0  0  0  0  0  4  0  0  0  4  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  k = big fruited holly
+  0  0  0  0  0  1  0  0  0  0  0  6  0  0  1  0  0  0  0  0  0  0  0  0  1  0  0  0  1  0  0  0 |  l = japanese cheesewood
+  0  0  0  0  0  0  0  0  0  0  0  0  7  0  3  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  m = wintersweet
+  0  0  0  0  0  0  0  0  0  0  0  0  0  8  0  1  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0 |  n = camphortree
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  8  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0 |  o = japan arrowwood
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  8  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0 |  p = sweet osmanthus
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  q = deodar
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  3  0  0  7  0  0  0  0  0  0  0  0  0  0  0  0  0  0 |  r = gingko
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  7  0  0  0  1  0  0  0  0  0  0  0  0  0 |  s = crepe myrtle
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  8  1  0  0  0  0  1  0  0  0  0  0  0 |  t = oleander
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0  0  0  0 |  u = yew plum pine
+  0  0  0  0  0  0  0  0  0  0  2  0  2  0  0  0  0  0  0  0  0  6  0  0  0  0  0  0  0  0  0  0 |  v = japanese flowering cherry
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  9  0  0  0  0  0  0  0  0  0 |  w = glossy privet
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0  0  0  0 |  x = chinese toon
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0  0  0  0  0  7  0  0  0  0  0  0  0 |  y = peach
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  9  0  0  0  0  0  0 |  z = ford woodlotus
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0  0  0  0  0 | aa = trident maple
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  2  0  0  0  0  0  1  0  0  0  0  0  6  0  0  0  0 | ab = beals barberry
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  6  0  0  0 | ac = southern mongolia
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  8  0  0 | ad = canadian bipolar
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  7  0 | ae = chinese tulip tree
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  9 | af = tangerine
+
+
+Pengujian ketujuh (nilai sigma=200)
+=== Evaluation on test set ===
+
+Time taken to test model on supplied test set: 1.04 seconds
+
+=== Summary ===
+
+Correctly Classified Instances         113               35.3125 %
+Incorrectly Classified Instances       207               64.6875 %
+Kappa statistic                          0.3323
+Mean absolute error                      0.0596
+Root mean squared error                  0.1724
+Relative absolute error                 98.4905 %
+Root relative squared error             99.0582 %
+Total Number of Instances              320     
+
+=== Detailed Accuracy By Class ===
+
+                 TP Rate  FP Rate  Precision  Recall   F-Measure  MCC      ROC Area  PRC Area  Class
+                 0.300    0.000    1.000      0.300    0.462      0.542    0.907     0.752     pubescent bamboo
+                 0.700    0.000    1.000      0.700    0.824      0.833    0.995     0.880     chinese horse chestnut
+                 0.500    0.000    1.000      0.500    0.667      0.701    0.921     0.808     chinese redbud
+                 0.000    0.000    ?          0.000    ?          ?        0.578     0.130     true indigo
+                 0.100    0.000    1.000      0.100    0.182      0.312    0.914     0.807     japanese maple
+                 0.400    0.003    0.800      0.400    0.533      0.557    0.806     0.443     nanmu
+                 0.200    0.000    1.000      0.200    0.333      0.442    0.955     0.903     castor aralia
+                 0.400    0.000    1.000      0.400    0.571      0.626    0.918     0.808     goldenrain tree
+                 0.600    0.000    1.000      0.600    0.750      0.770    0.930     0.752     chinese cinnamon
+                 0.100    0.000    1.000      0.100    0.182      0.312    0.785     0.518     anhui barberry
+                 0.300    0.000    1.000      0.300    0.462      0.542    0.824     0.434     big fruited holly
+                 0.200    0.000    1.000      0.200    0.333      0.442    0.833     0.523     japanese cheesewood
+                 0.100    0.000    1.000      0.100    0.182      0.312    0.913     0.647     wintersweet
+                 0.100    0.000    1.000      0.100    0.182      0.312    0.862     0.589     camphortree
+                 0.300    0.013    0.429      0.300    0.353      0.341    0.773     0.333     japan arrowwood
+                 0.400    0.003    0.800      0.400    0.533      0.557    0.846     0.511     sweet osmanthus
+                 0.900    0.000    1.000      0.900    0.947      0.947    1.000     1.000     deodar
+                 0.200    0.000    1.000      0.200    0.333      0.442    0.872     0.619     gingko
+                 0.400    0.000    1.000      0.400    0.571      0.626    0.807     0.429     crepe myrtle
+                 0.100    0.000    1.000      0.100    0.182      0.312    0.779     0.518     oleander
+                 0.700    0.000    1.000      0.700    0.824      0.833    0.999     0.967     yew plum pine
+                 0.000    0.000    ?          0.000    ?          ?        0.841     0.681     japanese flowering cherry
+                 0.300    0.000    1.000      0.300    0.462      0.542    0.935     0.810     glossy privet
+                 0.400    0.000    1.000      0.400    0.571      0.626    0.998     0.943     chinese toon
+                 0.200    0.003    0.667      0.200    0.308      0.355    0.858     0.397     peach
+                 0.400    0.000    1.000      0.400    0.571      0.626    0.873     0.566     ford woodlotus
+                 0.600    0.000    1.000      0.600    0.750      0.770    1.000     1.000     trident maple
+                 0.500    0.003    0.833      0.500    0.625      0.637    0.864     0.495     beals barberry
+                 0.100    0.000    1.000      0.100    0.182      0.312    0.775     0.275     southern mongolia
+                 0.400    0.000    1.000      0.400    0.571      0.626    0.868     0.619     canadian bipolar
+                 1.000    0.642    0.048      1.000    0.091      0.131    0.679     0.048     chinese tulip tree
+                 0.400    0.000    1.000      0.400    0.571      0.626    0.933     0.773     tangerine
+Weighted Avg.    0.353    0.021    ?          0.353    ?          ?        0.870     0.624     
+
+=== Confusion Matrix ===
+
+  a  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r  s  t  u  v  w  x  y  z aa ab ac ad ae af   <-- classified as
+  3  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  7  0 |  a = pubescent bamboo
+  0  7  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  3  0 |  b = chinese horse chestnut
+  0  0  5  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0 |  c = chinese redbud
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0 |  d = true indigo
+  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  9  0 |  e = japanese maple
+  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  6  0 |  f = nanmu
+  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  8  0 |  g = castor aralia
+  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  6  0 |  h = goldenrain tree
+  0  0  0  0  0  1  0  0  6  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  2  0 |  i = chinese cinnamon
+  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  9  0 |  j = anhui barberry
+  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  6  0 |  k = big fruited holly
+  0  0  0  0  0  0  0  0  0  0  0  2  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  6  0 |  l = japanese cheesewood
+  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  9  0 |  m = wintersweet
+  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  9  0 |  n = camphortree
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  7  0 |  o = japan arrowwood
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  1  0  0  5  0 |  p = sweet osmanthus
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  9  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0 |  q = deodar
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  0  0  0  0  0  0  0  8  0 |  r = gingko
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  0  0  0  0  0  6  0 |  s = crepe myrtle
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  9  0 |  t = oleander
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  7  0  0  0  0  0  0  0  0  0  3  0 |  u = yew plum pine
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0 |  v = japanese flowering cherry
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  3  0  0  0  0  0  0  0  7  0 |  w = glossy privet
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  0  0  6  0 |  x = chinese toon
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  2  0  0  0  0  0  8  0 |  y = peach
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  0  0  0  0  6  0 |  z = ford woodlotus
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  6  0  0  0  4  0 | aa = trident maple
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  5  0  0  5  0 | ab = beals barberry
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  0  0  0  0  0  0  0  0  0  0  0  0  1  0  8  0 | ac = southern mongolia
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  4  6  0 | ad = canadian bipolar
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0 10  0 | ae = chinese tulip tree
+  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  6  4 | af = tangerine
+
+
+Kesimpulan:
+1. Akurasi dari pengujian dengan nilai sigma = 1 adalah 76.5625 %.
+2. Akurasi dari pengujian dengan nilai sigma = 10 adalah 87.8125 %.
+3. Akurasi dari pengujian dengan nilai sigma = 20 adalah 87.1875 %.
+4. Akurasi dari pengujian dengan nilai sigma = 25 adalah 85.625  %.
+5. Akurasi dari pengujian dengan nilai sigma = 50 adalah 77.8125 %.
+6. Akurasi dari pengujian dengan nilai sigma = 100 adalah 77.8125 %.
+7. Akurasi dari pengujian dengan nilai sigma = 200 adalah 35.3125 %
+
+
+Dengan menggunakan fitur morfologi saja, akurasi paling baik didapat dengan menggunakan 
+nilai sigma sebesar 10 yang menghasilkan akurasi sebesar 87.8125 %.

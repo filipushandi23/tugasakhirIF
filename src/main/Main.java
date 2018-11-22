@@ -78,6 +78,7 @@ public class Main extends javax.swing.JFrame {
     static String savedDirectory;
 
     private int counter = 0;
+    private String imgName="";
 
     public Main() {
         initComponents();
@@ -106,7 +107,7 @@ public class Main extends javax.swing.JFrame {
             "japanese maple", "nanmu", "castor aralia", "goldenrain tree", "chinese cinnamon",
             "anhui barberry", "big fruited holly", "japanese cheesewood",
             "wintersweet", "camphortree", "japan arrowwood", "sweet osmanthus",
-            "deodar", "gingko", "crepe myrtle", "oleander", "yew plum nine",
+            "deodar", "gingko", "crepe myrtle", "oleander", "yew plum pine",
             "japanese flowering cherry", "glossy privet", "chinese toon", "peach",
             "ford woodlotus", "trident maple", "beals barberry",
             "southern magnolia", "canadian poplar", "chinese tulip tree", "tangerine"};
@@ -140,6 +141,7 @@ public class Main extends javax.swing.JFrame {
                 int rVal = c.showOpenDialog(Main.this);
                 if (rVal == JFileChooser.APPROVE_OPTION) {
                     currentDirectory = c.getCurrentDirectory().toString() + "\\" + c.getSelectedFile().getName();
+                    imgName = c.getSelectedFile().getName();
                     System.out.println("Dir : " + currentDirectory);
                     extractMorphButton.setEnabled(true);
                     extractGLCMButton.setEnabled(true);
@@ -188,7 +190,7 @@ public class Main extends javax.swing.JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //System.out.println("Click go: "+calculateDistance(xFrom, yFrom, xTo, yTo));
-                String filename = "F:\\Dataset Text\\morphological-features-extracted-training.csv";
+                String filename = "F:\\Dataset Text\\morphological-features-extracted-test.csv";
                 //System.out.println("CUrr: "+currentDirectory);
 //                Mat color = Imgcodecs.imread(currentDirectory);
                 Mat color = morph.bufferedImageToMat(imageProcessed);
@@ -242,7 +244,7 @@ public class Main extends javax.swing.JFrame {
                     out.println(aspectRatio + "," + formFactor + "," + narrowFactor + ","
                             + rectangularity + "," + perimeterRatioOfDiameter + ","
                             + perimeterRatioOfLengthAndWidth
-                            + "," + options.getSelectedItem().toString());
+                            + "," + options.getSelectedItem().toString()+"," + imgName);
                 } catch (IOException ex) {
                     //exception handling left as an exercise for the reader
                 }
